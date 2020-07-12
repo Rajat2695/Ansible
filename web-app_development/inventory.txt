@@ -1,0 +1,2 @@
+web&db1 ansible_host=52.188.214.151 ansible_user=Rajat2695 ansible_ssh_pass=R@jat9780082168
+web&db2 ansible_host=40.75.5.215 ansible_user=Rajat2695 ansible_ssh_pass=R@jat9780082168
