@@ -1,0 +1,22 @@
+    - name: Install the Mysql Datanase
+      apt: name={{ item }} state=installed
+      with_items:
+        - mysql-server
+        - mysql-client
+
+    - name: start the Mysql server
+      service:
+          name: mysql
+          state: started
+          enabled: yes
+
+    - name: configure the mysql database
+      mysql_db: name="{{ db_name }}" state=present
+
+    - name: create the root user
+      mysql_user:
+        name: "{{ db_user }}"
+        password: "{{ db_pass }}"
+        priv: '*.*:ALL'
+        state: present
+        host: '%'

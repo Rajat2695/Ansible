@@ -1,0 +1,43 @@
+- name: undeploy the web application
+  hosts: web&db1,web&db2
+  become: true
+  tasks:
+    - name: uninstall all the required dependencies
+      apt: name={{ item }} state=removed
+      with_items:
+        - python 
+        - python-setuptools 
+        - python-dev 
+        - build-essential 
+        - python-pip 
+        - python-mysqldb
+
+    - name: uninstall the Mysql Database
+      apt: name={{ item }} state=removed
+      with_items:
+        - mysql-server 
+        - mysql-client
+    
+    - name: stop the Mysql server
+      service: 
+          name: mysql 
+          state: stopped
+          enabled: yes
+
+    - name: configure the mysql database
+      mysql_db: name="{{ db_name }}" state=absent
+
+    - name: delete the root user
+      mysql_user:
+        name: "{{ db_user }}"
+        password: "{{ db_pass }}"
+        priv: '*.*:ALL'
+        state: absent
+        host: '%'
+
+    - name: uninstall the python dependencies
+      pip: name= "{{ item }}" state=absent
+      with_items:
+        - flask
+        - flask-mysql
+    
